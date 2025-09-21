@@ -1,9 +1,14 @@
-import React from 'react';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate();
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Formulario de Login enviado');
+        console.log("Formulario de Login enviado");
+
+        navigate("/home");
     };
 
     return (
@@ -14,7 +19,10 @@ export default function Login() {
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+                        <label
+                            className="block text-gray-700 text-sm font-semibold mb-2"
+                            htmlFor="email"
+                        >
                             Correo Electrónico
                         </label>
                         <input
@@ -25,7 +33,10 @@ export default function Login() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
+                        <label
+                            className="block text-gray-700 text-sm font-semibold mb-2"
+                            htmlFor="password"
+                        >
                             Contraseña
                         </label>
                         <input
@@ -37,11 +48,22 @@ export default function Login() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                        className="w-full mt-5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
                     >
                         Iniciar Sesión
                     </button>
                 </form>
+
+               
+                <p className="text-sm text-center text-gray-600 mt-6">
+                    ¿No tenés cuenta?{" "}
+                    <Link
+                        to="/register"
+                        className="text-blue-600 font-semibold hover:underline"
+                    >
+                        Crear una cuenta
+                    </Link>
+                </p>
             </div>
         </div>
     );
