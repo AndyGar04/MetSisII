@@ -1,75 +1,39 @@
-<<<<<<< HEAD
-# MetSisII
-Este repositorio esta destinado a subir todo el material practico de la materia "Metodologia en Sistemas II"
-"Tienda online"
-=======
-# React + TypeScript + Vite
+# Plataforma de tienda online
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Objetivo
+El objetivo principal de esta WebPage es crear una solución simple y prolija para los pequeños emprendimientos, que no cuentan con una administración prolija/sencilla para vender sus productos. Esta plataforma sera adaptable a cada negocio (tanto estetica como funcionalmente), ademas de sencilla y amigable con el usuario. 
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔑 Funcionalidades
+### Para usuarios/potenciales clientes:
+Los usuarios comunes, van a poder registrarse, ver el precio de cada producto, con la posibilidad de añardirlo a un carrito. Y luego para concretar el pago, se podran comunicar mediante un boton con el dueño del emprendimiento.
 
-## Expanding the ESLint configuration
+#### Busqueda de productos
+Los usuarios tendran la posibilidad de utilizar filtros, por:
+- Precio
+- Categoria
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Para emprendedores/dueños
+- Añadir nuevos productos.
+- Eliminar productos.
+- Actualizar productos.
+- Controlar stock de los productos.
+- Dashboard con información de todos los usuarios y compras concretadas.
+- Control de ventas, inverciones y gastos.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚙️ Tecnologías a utilizar:
+> Librerias a utilizar: A definir.
+> Frontend (usuarios y dueños): React Web y Vite.
+> Backend: Typescript, Node.js con Express.
+> Base de datos: PostgreSQL (Ya utilizado en otros trabahos).
+> Autenticación: via JWT.
+> Hosting: A definir.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Cualquier cambio lo vamos a ir adiriendo
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ☢ Patrones a utilizar
+Por lo que hemos investigado hasta el momento podriamos usar un Adapter que nos podria servir más adelante en caso de querer conectar la tienda con servicios externos (tipo pagos o sistemas contables) que no utilicen los mismos lenguajes de programacion que nosotros. Por otro lado, con un Decorator podriamos ir sumando cosas extra sin romper nada, como agregar nuevos canales de notificación o distintos niveles de logging. Otro "adaptable" podria ser un Facade viene bien para simplificar lo complejo, por ejemplo que el frontend tenga un único punto de entrada para hacer compras sin preocuparse por lo que pasa atrás.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+En cuanto a cómo se comporta el sistema, un Observer sería ideal para que cuando cambie algo (ejemplo: se agote el stock de un producto) los usuarios interesados se enteren solos sin tener que estar revisando. Tambien podriamos utilizar el Strategy para no llenar el código de condicionales, por ejemplo al manejar distintos métodos de pago o formas de filtrar productos. Y por ultimo el Command lo podriamos utilizar para el dueño del local, porque nos da la chance de manejar acciones del panel de admin (agregar, editar, borrar) de manera más ordenada.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
->>>>>>> dc9c12b (Primer commit)
+Realmente no sabemos si vamos a utilizar todos los mencionados, sin embargo vimos que nuestro proyecto seria adaptable a ellos.
