@@ -22,12 +22,12 @@ Los usuarios tendran la posibilidad de utilizar filtros, por:
 - Control de ventas, inverciones y gastos.
 
 ## ⚙️ Tecnologías a utilizar:
-> Librerias a utilizar: A definir.
-> Frontend (usuarios y dueños): React Web y Vite.
-> Backend: Typescript, Node.js con Express.
-> Base de datos: PostgreSQL (Ya utilizado en otros trabahos).
-> Autenticación: via JWT.
-> Hosting: A definir.
+- Librerias a utilizar: A definir.
+- Frontend (usuarios y dueños): React Web y Vite.
+- Backend: Typescript, Node.js con Express.
+- Base de datos: PostgreSQL (Ya utilizado en otros trabahos).
+- Autenticación: via JWT.
+- Hosting: A definir.
 
 Cualquier cambio lo vamos a ir adiriendo
 
