@@ -25,11 +25,11 @@ Los usuarios tendran la posibilidad de utilizar filtros, por:
 - Librerias a utilizar: A definir.
 - Frontend (usuarios y dueños): React Web y Vite.
 - Backend: Typescript, Node.js con Express.
-- Base de datos: PostgreSQL (Ya utilizado en otros trabahos).
+- Base de datos: PostgreSQL (Ya utilizado en otros trabajos).
 - Autenticación: via JWT.
 - Hosting: A definir.
 
-Cualquier cambio lo vamos a ir adiriendo
+Cualquier cambio lo vamos a ir adhiriendo
 
 ## ☢ Patrones a utilizar
 Por lo que hemos investigado hasta el momento podriamos usar un Adapter que nos podria servir más adelante en caso de querer conectar la tienda con servicios externos (tipo pagos o sistemas contables) que no utilicen los mismos lenguajes de programacion que nosotros. Por otro lado, con un Decorator podriamos ir sumando cosas extra sin romper nada, como agregar nuevos canales de notificación o distintos niveles de logging. Otro "adaptable" podria ser un Facade viene bien para simplificar lo complejo, por ejemplo que el frontend tenga un único punto de entrada para hacer compras sin preocuparse por lo que pasa atrás.
