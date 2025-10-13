@@ -1,6 +1,6 @@
-import { ProductoCrud } from "../../interface/productoCrud.interface.js";
-import { Producto } from "../../producto.js";
-import { Categoria } from "../../categoria.js";
+import { ProductoCrud } from "../interface/productoCrud.interface.js";
+import { Producto } from "../producto.js";
+import { Categoria } from "../categoria.js";
 
 export class MockProducto implements ProductoCrud{
     protected tam: number;

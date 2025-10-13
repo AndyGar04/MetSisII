@@ -115,5 +115,3 @@ class TaskController {
 }
 
 export default new TaskController();
-
-//50:39mins

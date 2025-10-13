@@ -1,5 +1,5 @@
-import { CategoriaCrud } from "../../interface/categoriaCrud.interface.js";
-import { Categoria } from "../../categoria.js";
+import { CategoriaCrud } from "../interface/categoriaCrud.interface.js";
+import { Categoria } from "../categoria.js";
 
 export class MockCategoria implements CategoriaCrud{
     protected tam: number;
