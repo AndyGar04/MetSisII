@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import taskRoute from './routes/task.routes';
-
+import categoriaRoute from './routes/categoria.routes';
+import productoRoute from './routes/producto.routes';
 
 class Server {
     public app: express.Application;
@@ -14,18 +14,18 @@ class Server {
         this.routes();
         
     }
+
     middlewares(){
         this.app.use(express.json({limit: '150mb'}));
         //Cors
         this.app.use( cors());
     }
-    routes(){
-        this.app.use("/tasks",taskRoute);
-        // this.app.use( "/categories",categoryRoute);
-        // this.app.use("/products",productRouote)
-        // this.app.use("/restart",restartRoute);
 
+    routes(){
+        this.app.use("/categorias",categoriaRoute);
+        this.app.use("/productos", productoRoute);
     }
+
     start(callback: () => void) {
         this.app.listen(this.port, callback);
     }

@@ -1,5 +1,5 @@
-import { TaskCrud } from "../../interface/taskCrud.interface.js";
-import { Task } from "../../task.js";
+import { TaskCrud } from "../../interface/taskCrud.interface";
+import { Task } from "../../task";
 
 export class MockTask implements TaskCrud{
     protected tam: number;

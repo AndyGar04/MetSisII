@@ -1,5 +1,5 @@
-import { Producto } from "../producto.js";
-import { Categoria } from "../categoria.js";
+import { Producto } from "../producto";
+import { Categoria } from "../categoria";
 
 export interface ProductoCrud {
     getProductos():Promise<Array<Producto>>;

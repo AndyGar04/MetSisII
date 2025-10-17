@@ -1,7 +1,7 @@
-import { Categoria } from "../models/categoria.js";
-import { ProductoCrud } from "../models/interface/productoCrud.interface.js";
-import { Producto } from "../models/producto.js";
-import ProductoModel from "./../models/implementations/mockProductos.js";
+import { Categoria } from "../models/categoria";
+import { ProductoCrud } from "../models/interface/productoCrud.interface";
+import { Producto } from "../models/producto";
+import ProductoModel from "./../models/implementations/mockProductos";
 
 class ProductoService implements ProductoCrud{
     getProducto(id: string): Promise<Producto> {

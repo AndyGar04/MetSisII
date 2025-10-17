@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import TaskService from "../services/task.service.js";
-import { Task } from "../models/task.js";
-import taskService from "../services/task.service.js";
+import TaskService from "../services/task.service";
+import { Task } from "../models/task";
+import taskService from "../services/task.service";
 
 class TaskController {
     public async getTask (req: Request, res: Response){

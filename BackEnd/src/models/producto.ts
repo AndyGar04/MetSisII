@@ -1,4 +1,4 @@
-import { Categoria } from "./categoria.js";
+import { Categoria } from "./categoria";
 
 export class Producto {
     constructor(

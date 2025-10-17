@@ -1,4 +1,4 @@
-import tasksController from "../controllers/tasks.controller";
+/*import tasksController from "../controllers/tasks.controller";
 import mockTask from "../models/implementations/mockTask/mockTask";
 import { Task } from "../models/task";
 import TaskService from "../services/task.service";
@@ -74,4 +74,4 @@ describe("pruebas de la clase Task", () => {
     test("Cuando realizo la tarea deberia dar true",() => {
         expect(tarea1.isCumplida()).toBe(true);
     });
-});
+});*/

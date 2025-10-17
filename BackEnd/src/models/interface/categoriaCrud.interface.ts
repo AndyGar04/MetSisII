@@ -1,4 +1,4 @@
-import { Categoria } from "../categoria.js";
+import { Categoria } from "../categoria";
 
 export interface CategoriaCrud {
     getCategorias():Promise<Array<Categoria>>;

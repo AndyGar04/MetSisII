@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import ProductoService from '../services/producto.service.js';
-import { Producto } from '../models/producto.js';
-import { Categoria } from '../models/categoria.js';
-import productoService from '../services/producto.service.js';
-import { ca } from 'zod/locales';
+import ProductoService from '../services/producto.service';
+import { Producto } from '../models/producto';
+import { Categoria } from '../models/categoria';
+import productoService from '../services/producto.service';
+import categoriaService from '../services/categoria.service';
 
 class ProductoController{
     public async getProducto(req: Request, res:Response){
@@ -13,6 +13,7 @@ class ProductoController{
         }else{
             try{
                 const producto = await ProductoService.getProducto(id);
+                res.status(200).json(producto);
             }catch(error){
                 if (error instanceof Error){
                     res.status(404).json({
@@ -29,9 +30,32 @@ class ProductoController{
     }
 
     public async addProducto(req: Request, res: Response){
-        const producto = req.body;
-        const nuevoProducto = await ProductoService.addProducto(producto);
-        res.status(202).json(nuevoProducto);
+        try{
+            const {nombre, categoria, cantidad, precio} = req.body;
+            let categoriaInstancia: Categoria;
+
+            if (typeof categoria === "string"){
+                const categoriaEncontrada = await categoriaService.getCategoria(categoria)
+
+                if(!categoriaEncontrada){
+                    return res.status(404).json({ message: "Categoría no encontrada" });
+                }
+
+                categoriaInstancia = categoriaEncontrada;
+
+            } else { 
+                
+                categoriaInstancia = new Categoria(categoria.nombre);
+                categoriaInstancia.setId(categoria.id);
+                
+            }
+
+            const nuevoProducto = new Producto(nombre, categoriaInstancia, cantidad, precio);
+            const nuevoProductoCompleto = await ProductoService.addProducto(nuevoProducto);
+            res.status(202).json(nuevoProductoCompleto);
+        }catch(error){
+            res.status(500).json({message: "Error al agregar producto", error})
+        }
     }
 
     public async deleteProducto(req: Request, res: Response){

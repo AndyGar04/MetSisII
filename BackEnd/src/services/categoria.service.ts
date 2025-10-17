@@ -1,6 +1,6 @@
-import { CategoriaCrud } from "../models/interface/categoriaCrud.interface.js";
-import { Categoria } from "../models/categoria.js";
-import CategoriaModel from './../models/implementations/mockCategoria.js';
+import { CategoriaCrud } from "../models/interface/categoriaCrud.interface";
+import { Categoria } from "../models/categoria";
+import CategoriaModel from './../models/implementations/mockCategoria';
 
 class CategoriaService implements CategoriaCrud{
     getCategoria(id: string): Promise<Categoria> {

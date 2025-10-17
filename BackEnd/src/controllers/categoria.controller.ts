@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import categoriaService from "../services/categoria.service.js";
-import { Categoria } from "../models/categoria.js";
+import categoriaService from "../services/categoria.service";
+import { Categoria } from "../models/categoria";
 
 class CategoriaController { 
     public async getCategoria (req: Request, res: Response){
@@ -27,9 +27,14 @@ class CategoriaController {
     }
 
     public async addCategoria(req: Request, res: Response){
-        const categoria = req.body;
-        const nuevaCategoria = await categoriaService.addCategoria(categoria);
-        res.status(202).json(nuevaCategoria);
+        try{
+            const { nombre } = req.body;
+            const categoria = new Categoria(nombre);
+            const nuevaCategoria = await categoriaService.addCategoria(categoria);
+            res.status(202).json(nuevaCategoria);
+        }catch(error){
+            res.status(500).json({ message: "Error al agregar categoría", error});
+        }    
     }
 
     public deleteCategoria(req: Request, res: Response){
