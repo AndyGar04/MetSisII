@@ -1,15 +1,50 @@
-import React from "react";
+import React, { useState } from "react"; //metimos useState
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const navigate = useNavigate();
+    //para guardar los datos del formulario(email, contra y errores)
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    
+    //borre la funcion handleSubmit vieja y meti esta nueva
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Esto ya lo tenías, previene recarga
+    setError(null);     // Limpiamos errores viejos
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log("Formulario de Login enviado");
+    try {
+      //llama la api del backend (url a checkear)
+      const response = await fetch('/api/auth/login', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        navigate("/home");
-    };
+      const data = await response.json();
+
+      //manejamos la respuesta
+      if (response.ok) {
+        // exito, guardamos el token
+        console.log('Login exitoso!', data.token);
+        localStorage.setItem('token', data.token);
+        
+        //redirigimos 
+        navigate("/home"); 
+
+      } else {
+        //mostramos el error que nos da el back
+        setError(data.message || 'Usuario o contraseña incorrecta');
+      }
+
+    } catch (err) {
+      //error de red, como caida del servidor
+      console.error('Error de red:', err);
+      setError('No se pudo conectar al servidor.');
+    }
+  };
 
     return (
         <div className="container mx-auto p-6 mt-16 flex justify-center items-center min-h-[70vh]">
@@ -26,10 +61,12 @@ export default function Login() {
                             Correo Electrónico
                         </label>
                         <input
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
                             type="email"
                             id="email"
                             required
+                            value={email} //nueva linea
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} //mismo de arriba
                         />
                     </div>
                     <div>
@@ -40,12 +77,19 @@ export default function Login() {
                             Contraseña
                         </label>
                         <input
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
                             type="password"
                             id="password"
                             required
+                            value={password} //nueva linea
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} //mismo de arriba
                         />
                     </div>
+                    {error && (
+                        <p className="text-red-500 text-sm text-center mb-4">
+                        {error}
+                    </p>
+)}
                     <button
                         type="submit"
                         className="w-full mt-5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:from-indigo-600 hover:to-blue-500 transition-all duration-300"
