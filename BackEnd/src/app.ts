@@ -19,7 +19,10 @@ class Server {
     middlewares(){
         this.app.use(express.json({limit: '150mb'}));
         //Cors
-        this.app.use( cors());
+        this.app.use( cors({
+            origin: 'http://localhost:5173',
+            credentials: true,
+        }));
     }
 
     routes(){
