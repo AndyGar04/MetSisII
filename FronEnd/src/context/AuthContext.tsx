@@ -12,6 +12,7 @@ interface User {
 interface AuthContextValue {
     user: User | null;
     accessToken: string | null;
+    isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
 }
@@ -21,14 +22,30 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const storedUserData = localStorage.getItem("user");
-        const storedToken = localStorage.getItem("accessToken");
-        if (storedUserData && storedToken) {
-            setUser(JSON.parse(storedUserData));
-            setAccessToken(storedToken);
-        }
+
+        const loadStoredAuth = () => {
+            try {
+                const storedUserData = localStorage.getItem("user");
+                const storedToken = localStorage.getItem("accessToken");
+                
+                if (storedUserData && storedToken) {
+                    setUser(JSON.parse(storedUserData));
+                    setAccessToken(storedToken);
+                }
+            } catch (error) {
+                console.error("Error al cargar datos de autenticación:", error);
+
+                localStorage.removeItem("user");
+                localStorage.removeItem("accessToken");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadStoredAuth();
     }, []);
 
     const login = async (email: string, password: string) => {
@@ -46,7 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("accessToken");
     }
 
-    const value: AuthContextValue = { user, accessToken, login, logout };
+    const value: AuthContextValue = { user, accessToken, isLoading, login, logout };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

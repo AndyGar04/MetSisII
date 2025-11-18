@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 
 export const AdminLogin = () => {
-    const { login } = useAuth();
+    const { login, user, isLoading } = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+
+    // Redirige al dashboard si el usuario ya está logueado
+    useEffect(() => {
+        if (!isLoading && user && user.role === "admin") {
+            navigate("/admin/dashboard", { replace: true });
+        }
+    }, [user, isLoading, navigate]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -25,6 +32,18 @@ export const AdminLogin = () => {
         } finally {
             setLoading(false);
         }
+    }
+
+    // Mostrar loader mientras se verifica el estado de autenticación
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+                    <p className="mt-4 text-gray-600">Cargando...</p>
+                </div>
+            </div>
+        );
     }
 
     return (
