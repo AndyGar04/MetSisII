@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import categoriaRoute from './routes/categoria.routes';
 import productoRoute from './routes/producto.routes';
+import authRoute from './auth/auth.routes';
 
 class Server {
     public app: express.Application;
@@ -18,12 +19,16 @@ class Server {
     middlewares(){
         this.app.use(express.json({limit: '150mb'}));
         //Cors
-        this.app.use( cors());
+        this.app.use( cors({
+            origin: 'http://localhost:5173',
+            credentials: true,
+        }));
     }
 
     routes(){
         this.app.use("/api/categorias",categoriaRoute);
         this.app.use("/api/productos", productoRoute);
+        this.app.use("/api/auth", authRoute);
     }
 
     start(callback: () => void) {
