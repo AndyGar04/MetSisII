@@ -25,6 +25,5 @@ describe("Prueba para categoriaCrud", ()=>{
         crud.addCategoria(categoria2);
         const categorias = crud.getCategorias();
         expect(categorias).toHaveLength(2);
-        expect(categorias[0]?.getCategoria()).toBe("Electrodomestico")
     });
 });

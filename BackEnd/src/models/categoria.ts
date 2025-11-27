@@ -1,7 +1,7 @@
 export class Categoria {
     constructor(
-        protected nombre: string,
-        protected id: string = "" 
+        protected id: string,
+        protected nombre: string
     ){}
 
    // Getter y Setter de id

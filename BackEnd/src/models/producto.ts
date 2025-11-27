@@ -2,11 +2,11 @@ import { Categoria } from "./categoria";
 
 export class Producto {
     constructor(
+        protected id: string,
         protected nombre: string,
         protected categoria: Categoria,
         protected cantidad: number,
-        protected precio: number,
-        protected id: string = "" 
+        protected precio: number 
     ){}
 
    // Getter y Setter de id
