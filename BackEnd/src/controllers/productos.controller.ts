@@ -1,142 +1,113 @@
-import { Request, Response } from 'express';
-import ProductoService from '../services/producto.service';
-import { Producto } from '../models/producto';
-import { Categoria } from '../models/categoria';
-import productoService from '../services/producto.service';
-import categoriaService from '../services/categoria.service';
+import { Request, Response } from "express";
+import productoService from "../services/producto.service";
+import { Producto } from "../models/producto";
+import { Categoria } from "../models/categoria";
 
-class ProductoController{
-    public async getProducto(req: Request, res:Response){
-        const id = req.params.id;
-        if(!id){
-            res.status(402).json({message: "Id no definido"});
-        }else{
-            try{
-                const producto = await ProductoService.getProducto(id);
-                res.status(200).json(producto);
-            }catch(error){
-                if (error instanceof Error){
-                    res.status(404).json({
-                        message: error.message
-                    })
-                }
+class ProductoController {
+
+    public async getProducto(req: Request, res: Response) {
+        try {
+            const id = req.params.id;
+            if (!id) return res.status(400).json({ message: "ID requerido" });
+
+            const producto = await productoService.getProducto(id);
+            
+            if (!producto) {
+                return res.status(404).json({ message: "Producto no encontrado" });
             }
+
+            return res.status(200).json(producto);
+        } catch (error) {
+            return res.status(500).json({ message: "Error interno del servidor", error });
         }
     }
 
-    public async getProductos(req: Request, res: Response){
-        const producto = await ProductoService.getProductos();
-        res.status(200).json(producto);
-    }
-
-    public async addProducto(req: Request, res: Response){
-        try{
-            const {id, nombre, categoria, cantidad, precio} = req.body;
-            let categoriaInstancia: Categoria;
-
-            if(!id){
-                return res.status(402).json({message: "Id no definido"});
-            }
-            if(nombre === undefined || categoria === undefined || cantidad === undefined || precio === undefined || nombre === '' || categoria === '' || cantidad === '' || precio === ''){ 
-                return  res.status(402).json({message: "Parametros incompletos"});
-            }
-            
-            try{
-                categoriaInstancia = await categoriaService.getCategoria(categoria.id);
-            }catch(error){
-                return res.status(404).json({message: "Categoria no encontrada"});
-            }
-
-            const nuevoProducto = new Producto(id, nombre, categoriaInstancia, cantidad, precio);
-            const nuevoProductoCompleto = await ProductoService.addProducto(nuevoProducto);
-            res.status(202).json(nuevoProductoCompleto);
-        }catch(error){
-            res.status(500).json({message: "Error al agregar producto", error})
+    public async getProductos(req: Request, res: Response) {
+        try {
+            const productos = await productoService.getProductos();
+            return res.status(200).json(productos);
+        } catch (error) {
+            return res.status(500).json({ message: "Error al listar productos" });
         }
     }
 
-    public async deleteProducto(req: Request, res: Response){
-        const id = req.params.id;
-        if(!id){
-            res.status(402).json(
-                {message: "Id no definido"}
-            );
-        }else{
-            try{
-                ProductoService.deleteProducto(id);
-                res.status(200).json({message: "Producto eliminado"})
-            }catch(error){
-                if(error instanceof Error){
-                    res.status(404).json({message:error});
-                }
+    public async addProducto(req: Request, res: Response) {
+        try {
+            const { id, nombre, categoria, cantidad, precio } = req.body;
+
+            if (!id || !nombre || !categoria || cantidad === undefined || precio === undefined) {
+                return res.status(400).json({ message: "Faltan datos requeridos (id, nombre, categoria, cantidad, precio)" });
             }
+
+            if (typeof nombre !== 'string' || nombre.trim() === '') {
+                return res.status(400).json({ message: "El nombre debe ser un texto válido" });
+            }
+
+            if (isNaN(cantidad) || cantidad < 0) {
+                return res.status(400).json({ message: "La cantidad debe ser un número mayor o igual a 0" });
+            }
+
+            if (isNaN(precio) || precio < 0) {
+                return res.status(400).json({ message: "El precio debe ser un número positivo" });
+            }
+
+            if (!categoria.id || !categoria.nombre) {
+                return res.status(400).json({ message: "La categoría enviada es inválida" });
+            }
+
+            try {
+                const productoExiste = await productoService.getProducto(id);
+                if (productoExiste) {
+                    return res.status(409).json({ message: `El producto con id ${id} ya existe` });
+                }
+            } catch (ignored) {
+                // No existe, continuamos felices
+            }
+
+            const nuevaCategoria = new Categoria(categoria.id, categoria.nombre);
+            const nuevoProducto = new Producto(id, nombre, nuevaCategoria, cantidad, precio);
+
+            const result = await productoService.addProducto(nuevoProducto);
+            return res.status(201).json(result);
+
+        } catch (error) {
+            return res.status(500).json({ message: "Error al crear producto", error });
         }
     }
 
-    public async editProducto(req:Request, res:Response){
-        const id = req.params.id;
-        const nombre = req.body.nombre;
-        const categoria = req.body.categoria;
-        const cantidad = req.body.cantidad;
-        const precio = req.body.precio;
+    public async editProducto(req: Request, res: Response) {
+        try {
+            const id = req.params.id;
+            const { nombre, categoria, cantidad, precio } = req.body;
 
-        if(!id || !nombre || !categoria || !cantidad || !precio){
-            res.status(402).json(
-                    {message: "Parametros incorrectos"}
-                );
-            
-        }else{
-            try{
-                const productoModificado = await productoService.editProduto(id, nombre, categoria, cantidad, precio);
-                res.status(200).json(productoModificado);
-            }catch(error){
-                if(error instanceof Error)
-                    res.status(404).json({message:error.message})
-                }
-        }    
+            if (!id) return res.status(400).json({ message: "ID no definido" });
+
+            if (!nombre || !categoria || cantidad === undefined || precio === undefined) {
+                return res.status(400).json({ message: "Faltan datos para editar" });
+            }
+            if (precio < 0 || cantidad < 0) {
+                return res.status(400).json({ message: "Precio o cantidad invalidos" });
+            }
+
+            const prodEditado = await productoService.editProduto(id, nombre, categoria, cantidad, precio);
+            return res.status(200).json(prodEditado);
+
+        } catch (error) {
+            return res.status(404).json({ message: "Error al editar o producto no encontrado" });
+        }
     }
 
-    public async editProductoPrecio(req:Request, res:Response){
-        const id = req.params.id;
-        const precio = req.body.precio;
+    public async deleteProducto(req: Request, res: Response) {
+        try {
+            const id = req.params.id;
+            if (!id) return res.status(400).json({ message: "ID requerido" });
 
-        if(!id || !precio){
-            res.status(402).json(
-                    {message: "Parametros incorrectos"}
-                );
-            
-        }else{
-            try{
-                const productoModificado = await productoService.editProductoPrecio(id, precio);
-                res.status(200).json(productoModificado);
-            }catch(error){
-                if(error instanceof Error)
-                    res.status(404).json({message:error.message})
-                }
-        }    
+            await productoService.deleteProducto(id);
+            return res.status(200).json({ message: "Producto eliminado" });
+        } catch (error) {
+            return res.status(404).json({ message: "No se pudo eliminar el producto" });
+        }
     }
-    public async editProductoCantidad(req:Request, res:Response){
-        const id = req.params.id;
-        const cantidad = req.body.cantidad;
+}
 
-        if(!id || !cantidad){
-            res.status(402).json(
-                    {message: "Parametros incorrectos"}
-                );
-            
-        }else{
-            try{
-                const productoModificado = await productoService.editProductoPrecio(id, cantidad);
-                res.status(200).json(productoModificado);
-            }catch(error){
-                if(error instanceof Error)
-                    res.status(404).json({message:error.message})
-                }
-        }    
-    }
-
-    public size(req:Request, res:Response){
-        res.status(200).json({size: productoService.size()})
-    }
-} 
 export default new ProductoController();

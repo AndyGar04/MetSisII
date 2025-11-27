@@ -19,12 +19,6 @@ class ProductoService implements ProductoCrud{
     editProduto(id: string, nombre: string, categoria: Categoria, cantidad: number, precio: number): Promise<Producto> {
         return ProductoModel.editProduto(id, nombre, categoria, cantidad, precio);
     }
-    editProductoCantidad(id: string, cantidad: number): Promise<Producto> {
-        return ProductoModel.editProductoCantidad(id, cantidad);
-    }
-    editProductoPrecio(id: string, precio: number): Promise<Producto> {
-        return ProductoModel.editProductoPrecio(id, precio);
-    }
     deleteProducto(id: string): Promise<void> {
         return ProductoModel.deleteProducto(id);
     }

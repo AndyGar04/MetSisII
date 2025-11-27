@@ -46,12 +46,24 @@ class CategoriaController {
                 return res.status(400).json({ message: "El nombre debe ser un texto válido" });
             }
 
+            try {
+                const existe = await categoriaService.getCategoria(id);
+                if (existe) {
+                    return res.status(409).json({ message: `La categoria con id ${id} ya existe` });
+                }
+            } catch (ignored) {
+                // Si entra aca, es probable que sea porque no encontro la categoria.
+            }
+
             const categoria = new Categoria(id, nombre);
             const nuevaCategoria = await categoriaService.addCategoria(categoria);
             
             return res.status(201).json(nuevaCategoria);
         } catch (error) {
-            return res.status(500).json({ message: "Error al agregar categoria", error });
+            console.error("Error en addCategoria:", error); 
+            
+            const mensajeError = error instanceof Error ? error.message : "Error desconocido";
+            return res.status(500).json({ message: "Error al agregar categoria", error: mensajeError });
         }    
     }
 

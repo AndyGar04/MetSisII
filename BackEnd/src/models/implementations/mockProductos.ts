@@ -56,17 +56,19 @@ export class MockProducto implements ProductoCrud{
     }
 
     deleteProducto(id: string): Promise<void> {
-        return new Promise<void>((resolve, rejects)=>{
-            const index = this.container.findIndex((Producto: Producto) => {
-                if (index === -1) {
-                    rejects(new Error("No existe el producto con ese id"));
-                }else{
-                    this.container.splice(index, 1);
-                    this.tam--;
-                }
-            }); 
-        });
+        return new Promise<void>((resolve, rejects) => {
+            const index = this.container.findIndex((p: Producto) => p.getId() == id);
+
+            if (index === -1) {
+                rejects(new Error("No existe el producto con ese id"));
+            } else {
+                this.container.splice(index, 1);
+                this.tam--;
+                resolve();
+            }
+        }); 
     }
+
     editProduto(id: string, nombre: string, categoria: Categoria, cantidad: number, precio: number): Promise<Producto> {
         return new Promise<Producto>((resolve, rejects)=>{
             const productoAModificar = this.container.find(
@@ -83,34 +85,9 @@ export class MockProducto implements ProductoCrud{
             }
         });
     }
-    editProductoPrecio(id: string, precio: number): Promise<Producto> {
-        return new Promise<Producto>((resolve, rejects)=>{
-            const productoAModificar = this.container.find(
-                (producto: Producto) => producto.getId()==id
-            );
-            if(!productoAModificar){
-                rejects(new Error("El producto no fue encontrado"));
-            }else{
-                productoAModificar.setPrecio(precio);
-                resolve(productoAModificar);
-            }
-        });
-    }
-    editProductoCantidad(id: string, cantidad: number): Promise<Producto> {
-        return new Promise<Producto>((resolve, rejects)=>{
-            const productoAModificar = this.container.find(
-                (producto: Producto) => producto.getId()==id
-            );
-            if(!productoAModificar){
-                rejects(new Error("El producto no fue encontrado"));
-            }else{
-                productoAModificar.setCantidad(cantidad);
-                resolve(productoAModificar);
-            }
-        });
-    }
+    
     size(): number {
-        throw new Error("Method not implemented.");
+        return this.container.length;
     }
 
 }

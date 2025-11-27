@@ -45,9 +45,10 @@ export class MockCategoria implements CategoriaCrud{
             const index = this.container.findIndex((categoria: Categoria) => categoria.getId() === id);
             if (index === -1) {
                 rejects(new Error("No existe una Categoria con ese id"));
-            }else{
+            } else {
                 this.container.splice(index, 1);
                 this.tam--;
+                resolve();
             }
         });
     }
