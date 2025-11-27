@@ -31,26 +31,23 @@ class ProductoController{
 
     public async addProducto(req: Request, res: Response){
         try{
-            const {nombre, categoria, cantidad, precio} = req.body;
+            const {id, nombre, categoria, cantidad, precio} = req.body;
             let categoriaInstancia: Categoria;
 
-            if (typeof categoria === "string"){
-                const categoriaEncontrada = await categoriaService.getCategoria(categoria)
-
-                if(!categoriaEncontrada){
-                    return res.status(404).json({ message: "Categoría no encontrada" });
-                }
-
-                categoriaInstancia = categoriaEncontrada;
-
-            } else { 
-                
-                categoriaInstancia = new Categoria(categoria.nombre);
-                categoriaInstancia.setId(categoria.id);
-                
+            if(!id){
+                return res.status(402).json({message: "Id no definido"});
+            }
+            if(nombre === undefined || categoria === undefined || cantidad === undefined || precio === undefined || nombre === '' || categoria === '' || cantidad === '' || precio === ''){ 
+                return  res.status(402).json({message: "Parametros incompletos"});
+            }
+            
+            try{
+                categoriaInstancia = await categoriaService.getCategoria(categoria.id);
+            }catch(error){
+                return res.status(404).json({message: "Categoria no encontrada"});
             }
 
-            const nuevoProducto = new Producto(nombre, categoriaInstancia, cantidad, precio);
+            const nuevoProducto = new Producto(id, nombre, categoriaInstancia, cantidad, precio);
             const nuevoProductoCompleto = await ProductoService.addProducto(nuevoProducto);
             res.status(202).json(nuevoProductoCompleto);
         }catch(error){
