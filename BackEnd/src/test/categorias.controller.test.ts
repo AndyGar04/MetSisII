@@ -55,8 +55,8 @@ describe('CategoriaController', () => {
 
     describe('addCategoria', () => {
         it('Debe retornar 201 al crear una categoria válida', async () => {
-            req = { body: { id: '10', nombre: 'Gaming' } };
-            const mockResponse = { id: '10', nombre: 'Gaming' };
+            req = { body: { nombre: 'Gaming' } };
+            const mockResponse = { id: '9', nombre: 'Gaming' };
 
             (categoriaService.addCategoria as any).mockResolvedValue(mockResponse);
 
@@ -64,23 +64,24 @@ describe('CategoriaController', () => {
 
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith(mockResponse);
+            expect(categoriaService.addCategoria).toHaveBeenCalled();
         });
 
         it('Debe retornar 400 si falta el nombre', async () => {
-            req = { body: { id: '10' } }; // Falta nombre
+            req = { body: {} }; // Sin nombre
 
             await CategoriaController.addCategoria(req as Request, res as Response);
 
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ 
-                message: expect.stringContaining("Faltan datos") 
+                message: expect.stringContaining("Falta el nombre") 
             }));
 
             expect(categoriaService.addCategoria).not.toHaveBeenCalled();
         });
 
         it('Debe retornar 400 si el nombre está vacío', async () => {
-            req = { body: { id: '10', nombre: '   ' } }; 
+            req = { body: { nombre: '   ' } }; 
 
             await CategoriaController.addCategoria(req as Request, res as Response);
 
