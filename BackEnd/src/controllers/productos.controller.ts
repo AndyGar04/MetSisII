@@ -89,7 +89,12 @@ class ProductoController {
                 return res.status(400).json({ message: "Precio o cantidad invalidos" });
             }
 
-            const prodEditado = await productoService.editProduto(id, nombre, categoria, cantidad, precio);
+            if (!categoria.id || !categoria.nombre) {
+                return res.status(400).json({ message: "Categoría inválida" });
+            }
+
+            const categoriaObj = new Categoria(categoria.id, categoria.nombre);
+            const prodEditado = await productoService.editProduto(id, nombre, categoriaObj, cantidad, precio);
             return res.status(200).json(prodEditado);
 
         } catch (error) {

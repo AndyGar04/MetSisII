@@ -120,17 +120,45 @@ describe('ProductoController', () => {
             await ProductoController.editProducto(req as Request, res as Response);
 
             expect(res.status).toHaveBeenCalledWith(200);
+            expect(productoService.editProduto).toHaveBeenCalled();
         });
 
-        it('Debe fallar (400) con datos inválidos', async () => {
+        it('Debe fallar (400) con datos inválidos (precio/cantidad negativos)', async () => {
             req = { 
                 params: { id: '1' },
-                body: { nombre: 'Mal', categoria: {}, cantidad: -5, precio: 100 } 
+                body: { 
+                    nombre: 'Mal', 
+                    categoria: { id: '1', nombre: 'Test' }, 
+                    cantidad: -5, 
+                    precio: 100 
+                } 
             };
 
             await ProductoController.editProducto(req as Request, res as Response);
 
             expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                message: expect.stringContaining('Precio o cantidad invalidos')
+            }));
+        });
+
+        it('Debe fallar (400) con categoría inválida', async () => {
+            req = { 
+                params: { id: '1' },
+                body: { 
+                    nombre: 'Test', 
+                    categoria: { id: '', nombre: '' }, 
+                    cantidad: 10, 
+                    precio: 100 
+                } 
+            };
+
+            await ProductoController.editProducto(req as Request, res as Response);
+
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                message: expect.stringContaining('Categoría inválida')
+            }));
         });
     });
 

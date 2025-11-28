@@ -36,26 +36,18 @@ class CategoriaController {
 
     public async addCategoria(req: Request, res: Response) {
         try {
-            const { id, nombre } = req.body;
+            const { nombre } = req.body;
 
-            if (!id || !nombre) {
-                return res.status(400).json({ message: "Faltan datos requeridos: id y nombre" });
+            if (!nombre) {
+                return res.status(400).json({ message: "Falta el nombre de la categoría" });
             }
             
             if (typeof nombre !== 'string' || nombre.trim().length === 0) {
                 return res.status(400).json({ message: "El nombre debe ser un texto válido" });
             }
 
-            try {
-                const existe = await categoriaService.getCategoria(id);
-                if (existe) {
-                    return res.status(409).json({ message: `La categoria con id ${id} ya existe` });
-                }
-            } catch (ignored) {
-                // Si entra aca, es probable que sea porque no encontro la categoria.
-            }
-
-            const categoria = new Categoria(id, nombre);
+            // Pasar categoría sin ID, el mock generará el ID automáticamente
+            const categoria = new Categoria("", nombre.trim());
             const nuevaCategoria = await categoriaService.addCategoria(categoria);
             
             return res.status(201).json(nuevaCategoria);

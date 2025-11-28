@@ -11,8 +11,6 @@ vi.mock('../models/implementations/mockProductos', () => ({
         getProductosCategoria: vi.fn(),
         addProducto: vi.fn(),
         editProduto: vi.fn(),
-        editProductoCantidad: vi.fn(),
-        editProductoPrecio: vi.fn(),
         deleteProducto: vi.fn(),
         size: vi.fn(),
     }

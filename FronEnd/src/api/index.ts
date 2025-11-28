@@ -14,8 +14,9 @@ export async function getCategorias() {
 
 // CRUD de Productos para Admin
 export async function createProducto(producto: {
+  id?: string;
   nombre: string;
-  categoria: string;
+  categoria: { id: string; nombre: string };
   cantidad: number;
   precio: number;
 }) {
@@ -32,7 +33,7 @@ export async function updateProducto(
   id: string,
   producto: {
     nombre: string;
-    categoria: string;
+    categoria: { id: string; nombre: string };
     cantidad: number;
     precio: number;
   }
