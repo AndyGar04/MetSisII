@@ -1,5 +1,13 @@
 const API_URL = "http://localhost:3000";
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('accessToken'); 
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}` // <--- ESTA ES LA LLAVE QUE FALTABA
+  };
+};
+
 export async function getProductos() {
   const res = await fetch(`${API_URL}/productos`);
   if (!res.ok) throw new Error("Error al obtener productos");
@@ -22,7 +30,7 @@ export async function createProducto(producto: {
 }) {
   const res = await fetch(`${API_URL}/productos`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(producto),
   });
   if (!res.ok) throw new Error("Error al crear producto");
@@ -40,7 +48,7 @@ export async function updateProducto(
 ) {
   const res = await fetch(`${API_URL}/productos/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(producto),
   });
   if (!res.ok) throw new Error("Error al actualizar producto");
@@ -50,6 +58,7 @@ export async function updateProducto(
 export async function deleteProducto(id: string) {
   const res = await fetch(`${API_URL}/productos/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error("Error al eliminar producto");
   return res.json();
@@ -59,7 +68,7 @@ export async function deleteProducto(id: string) {
 export async function createCategoria(categoria: { nombre: string }) {
   const res = await fetch(`${API_URL}/categorias`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(categoria),
   });
   if (!res.ok) throw new Error("Error al crear categoría");
@@ -69,7 +78,7 @@ export async function createCategoria(categoria: { nombre: string }) {
 export async function updateCategoria(id: string, categoria: { nombre: string }) {
   const res = await fetch(`${API_URL}/categorias/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(categoria),
   });
   if (!res.ok) throw new Error("Error al actualizar categoría");
@@ -79,6 +88,7 @@ export async function updateCategoria(id: string, categoria: { nombre: string })
 export async function deleteCategoria(id: string) {
   const res = await fetch(`${API_URL}/categorias/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error("Error al eliminar categoría");
   return res.json();
