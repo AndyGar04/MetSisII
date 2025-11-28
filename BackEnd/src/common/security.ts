@@ -42,3 +42,16 @@ export const verifyRefreshToken = (token: string): JwtUserPayload => {
         throw new Error('Token inválido o expirado');
     }
 }
+
+export const verifyAccessToken = (token: string): JwtUserPayload => {
+    const secret = process.env.JWT_ACCESS_SECRET;
+    if (!secret) {
+        throw new Error('JWT_ACCESS_SECRET no está definido en las variables de entorno');
+    }
+    try {
+        const decoded = jwt.verify(token, secret);
+        return decoded as JwtUserPayload;
+    } catch (err) {
+        throw new Error('Access Token inválido o expirado');
+    }
+}
