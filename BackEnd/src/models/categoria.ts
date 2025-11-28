@@ -19,4 +19,12 @@ export class Categoria {
     public setNombre(nombre: string): void {
         this.nombre = nombre;
     }
+
+    // Método para serialización JSON
+    public toJSON() {
+        return {
+            id: this.id,
+            nombre: this.nombre
+        };
+    }
 }

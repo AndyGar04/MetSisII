@@ -1,23 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/NavBar";
-import Footer from "./components/Footer";
-import Home from "./pages/home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Cart from "./pages/carts";
+import { Routes, Route, Link } from "react-router-dom";
+import { TiendaPage } from "./src/pages/TiendaPage";
+import { AdminLogin } from "./src/pages/AdminLogin";
+import { AdminDashboard } from "./src/pages/AdminDashboard";
+import { RequireAdmin } from "./src/components/RequireAdmin";
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <Routes>
+      <Route path="/" element={<TiendaPage />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <RequireAdmin>
+            <AdminDashboard />
+          </RequireAdmin>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+            <h1 className="text-4xl font-bold mb-4">404 - Página no encontrada</h1>
+            <Link
+              to="/"
+              className="text-blue-500 hover:underline"
+            >
+              Volver a la tienda
+            </Link>
+          </div>
+        }
+      />
+    </Routes>
   );
 }
 

@@ -47,4 +47,18 @@ export class Producto {
     public setCategoria(categoria: Categoria): void{
         this.categoria = categoria;
     }
+
+    // Método para serialización JSON
+    public toJSON() {
+        return {
+            id: this.id,
+            nombre: this.nombre,
+            categoria: {
+                id: this.categoria.getId(),
+                nombre: this.categoria.getNombre()
+            },
+            cantidad: this.cantidad,
+            precio: this.precio
+        };
+    }
 }

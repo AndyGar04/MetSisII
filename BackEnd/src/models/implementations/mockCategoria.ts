@@ -6,9 +6,28 @@ export class MockCategoria implements CategoriaCrud{
     protected container: Array<Categoria>;
     protected id: number;
     constructor(){
-        this.id=1;
-        this.tam = 0;
+        this.id=9;
+        this.tam = 8;
         this.container = new Array<Categoria>;
+        this.initializeCategorias();
+    }
+
+    private initializeCategorias(): void {
+        const categoriasIniciales = [
+            { id: "1", nombre: "Electrónica" },
+            { id: "2", nombre: "Ropa" },
+            { id: "3", nombre: "Alimentos" },
+            { id: "4", nombre: "Deportes" },
+            { id: "5", nombre: "Hogar" },
+            { id: "6", nombre: "Juguetes" },
+            { id: "7", nombre: "Libros" },
+            { id: "8", nombre: "Belleza" }
+        ];
+
+        categoriasIniciales.forEach(cat => {
+            const categoria = new Categoria(cat.id, cat.nombre);
+            this.container.push(categoria);
+        });
     }
 
     getCategorias(): Promise<Array<Categoria>> {

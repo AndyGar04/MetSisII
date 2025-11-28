@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import categoriaRoute from './routes/categoria.routes';
 import productoRoute from './routes/producto.routes';
+import authRoute from './auth/auth.routes';
 
 class Server {
     public app: express.Application;
@@ -22,6 +23,7 @@ class Server {
     }
 
     routes(){
+        this.app.use("/auth", authRoute);
         this.app.use("/categorias",categoriaRoute);
         this.app.use("/productos", productoRoute);
     }
