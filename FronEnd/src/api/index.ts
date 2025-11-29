@@ -4,7 +4,7 @@ const getAuthHeaders = () => {
   const token = localStorage.getItem('accessToken'); 
   return {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}` // <--- ESTA ES LA LLAVE QUE FALTABA
+    "Authorization": `Bearer ${token}`
   };
 };
 
@@ -20,7 +20,6 @@ export async function getCategorias() {
   return res.json();
 }
 
-// CRUD de Productos para Admin
 export async function createProducto(producto: {
   id?: string;
   nombre: string;
@@ -64,7 +63,6 @@ export async function deleteProducto(id: string) {
   return res.json();
 }
 
-// CRUD de Categorías para Admin
 export async function createCategoria(categoria: { nombre: string }) {
   const res = await fetch(`${API_URL}/categorias`, {
     method: "POST",
